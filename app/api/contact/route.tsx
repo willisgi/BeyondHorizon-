@@ -7,7 +7,7 @@ function checkRateLimit(ip: string): boolean {
   const limit = rateLimitMap.get(ip)
 
   if (!limit || now > limit.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + 60 * 60 * 1000 }) // 1 hour window
+    rateLimitMap.set(ip, { count: 1, resetTime: now + 60 * 60 * 1000 }) // 1-hour window
     return true
   }
 
@@ -26,13 +26,35 @@ function validateEmail(email: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
+    const ip =
+      request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      "unknown"
 
     if (!checkRateLimit(ip)) {
-      return NextResponse.json({ message: "Too many requests. Please try again later." }, { status: 429 })
+      return NextResponse.json(
+        { message: "Too many requests. Please try again later." },
+        { status: 429 },
+      )
     }
 
-    const body = await request.json()
+    // ✅ FIXED: safely parse JSON
+    let body
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json(
+        { message: "Invalid or missing JSON body." },
+        { status: 400 },
+      )
+    }
+
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { message: "Invalid request body." },
+        { status: 400 },
+      )
+    }
 
     const { name, email, company, industry, challenge, budget, timeline, message } = body
 
@@ -48,7 +70,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!message || message.trim().length < 10) {
-      return NextResponse.json({ message: "Message must be at least 10 characters long." }, { status: 400 })
+      return NextResponse.json(
+        { message: "Message must be at least 10 characters long." },
+        { status: 400 },
+      )
     }
 
     const contactData = {
@@ -64,10 +89,9 @@ export async function POST(request: NextRequest) {
       ip: ip === "unknown" ? "N/A" : ip,
     }
 
-    console.log(" Contact form submission received:", contactData)
+    console.log("Contact form submission received:", contactData)
 
     try {
-      // Check if Resend is available via environment variable
       if (process.env.RESEND_API_KEY) {
         const { Resend } = await import("resend")
         const resend = new Resend(process.env.RESEND_API_KEY)
@@ -95,18 +119,24 @@ export async function POST(request: NextRequest) {
           `,
         })
 
-        console.log(" Email sent successfully to", toEmail)
+        console.log("Email sent successfully to", toEmail)
       } else {
-        console.log(" Resend API key not configured. Email not sent. Data logged instead.")
+        console.log("Resend API key not configured. Email not sent. Data logged instead.")
       }
     } catch (emailError) {
-      console.error(" Error sending email:", emailError)
-      // This allows the form to succeed even if email sending fails
+      console.error("Error sending email:", emailError)
+      // Allow success even if email fails
     }
 
-    return NextResponse.json({ message: "Thank you for your submission. We'll be in touch soon!" }, { status: 200 })
+    return NextResponse.json(
+      { message: "Thank you for your submission. We'll be in touch soon!" },
+      { status: 200 },
+    )
   } catch (error) {
-    console.error(" Contact API error:", error)
-    return NextResponse.json({ message: "An error occurred. Please try again later." }, { status: 500 })
+    console.error("Contact API error:", error)
+    return NextResponse.json(
+      { message: "An error occurred. Please try again later." },
+      { status: 500 },
+    )
   }
 }
