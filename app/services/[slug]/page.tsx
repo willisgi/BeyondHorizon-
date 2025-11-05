@@ -4,8 +4,7 @@ import Link from "next/link"
 import { ArrowLeft, ArrowRight, Brain, Zap, Shield, BarChart3, Cpu, Lightbulb } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import  { handleScheduleConsultation } from "@/components/hero"
-
+import { handleScheduleConsultation } from "@/components/hero"
 
 const serviceDetails = {
   "ai-strategy": {
@@ -187,7 +186,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ slug
         <div className="max-w-4xl mx-auto">
           <Link
             href="/#services"
-            className="inline-flex items-center gap-2 text-accent hover:text-accent/80 transition mb-8"
+            className="inline-flex items-center gap-2 text-accent hover:text-accent/80 transition mb-8 flex-wrap"
           >
             <ArrowLeft size={20} />
             Back to Services
@@ -198,37 +197,50 @@ export default async function ServiceDetail({ params }: { params: Promise<{ slug
       {/* Service Header */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 border-b border-border">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-start gap-6 mb-6">
-            <div className="w-16 h-16 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="flex flex-col sm:flex-row items-start gap-6 mb-6">
+            <div className="w-16 h-16 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
               <Icon className="text-accent" size={32} />
             </div>
-            <div>
-              <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">{service.title}</h1>
-              <p className="text-xl text-foreground/60">{service.description}</p>
+            <div className="text-center sm:text-left">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 break-words">
+                {service.title}
+              </h1>
+              <p className="text-base sm:text-lg text-foreground/60 leading-relaxed">
+                {service.description}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Overview */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-6">Overview</h2>
-          <p className="text-lg text-foreground/70 leading-relaxed mb-8">{service.overview}</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 text-center sm:text-left">
+            Overview
+          </h2>
+          <p className="text-base sm:text-lg text-foreground/70 leading-relaxed mb-8">
+            {service.overview}
+          </p>
         </div>
       </section>
 
       {/* Benefits */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-card/50">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-card/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-8">Key Benefits</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-8 text-center sm:text-left">
+            Key Benefits
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {service.benefits.map((benefit, index) => (
-              <div key={index} className="flex gap-4 p-4 bg-background rounded-lg border border-border">
+              <div
+                key={index}
+                className="flex gap-4 p-4 bg-background rounded-lg border border-border"
+              >
                 <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
                   <div className="w-2 h-2 rounded-full bg-accent" />
                 </div>
-                <p className="text-foreground/80">{benefit}</p>
+                <p className="text-foreground/80 text-sm sm:text-base leading-snug">{benefit}</p>
               </div>
             ))}
           </div>
@@ -236,21 +248,32 @@ export default async function ServiceDetail({ params }: { params: Promise<{ slug
       </section>
 
       {/* Process */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-8">Our Process</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-8 text-center sm:text-left">
+            Our Process
+          </h2>
           <div className="space-y-6">
             {service.process.map((step, index) => (
-              <div key={index} className="flex gap-6">
-                <div className="flex flex-col items-center">
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row gap-6 items-start"
+              >
+                <div className="flex flex-col items-center sm:items-start mx-auto sm:mx-0">
                   <div className="w-10 h-10 rounded-full bg-accent/20 border-2 border-accent flex items-center justify-center font-semibold text-accent">
                     {index + 1}
                   </div>
-                  {index < service.process.length - 1 && <div className="w-1 h-12 bg-accent/20 mt-2" />}
+                  {index < service.process.length - 1 && (
+                    <div className="w-1 h-12 bg-accent/20 mt-2" />
+                  )}
                 </div>
-                <div className="pb-6">
-                  <p className="text-lg text-foreground font-semibold mb-2">{step.split(":")[0]}</p>
-                  <p className="text-foreground/70">{step.split(":")[1]}</p>
+                <div className="flex-1">
+                  <p className="text-lg text-foreground font-semibold mb-2 text-center sm:text-left">
+                    {step.split(":")[0]}
+                  </p>
+                  <p className="text-foreground/70 text-center sm:text-left">
+                    {step.split(":")[1]}
+                  </p>
                 </div>
               </div>
             ))}
@@ -259,40 +282,42 @@ export default async function ServiceDetail({ params }: { params: Promise<{ slug
       </section>
 
       {/* Ideal For */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-accent/5 border-y border-border">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-accent/5 border-y border-border">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-6">Ideal For</h2>
-          <p className="text-lg text-foreground/70 leading-relaxed">{service.ideal}</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 text-center sm:text-left">
+            Ideal For
+          </h2>
+          <p className="text-base sm:text-lg text-foreground/70 leading-relaxed text-center sm:text-left">
+            {service.ideal}
+          </p>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-  <h2 className="text-3xl font-bold text-foreground mb-6">
-    Ready to Get Started?
-  </h2>
-  <p className="text-lg text-foreground/60 mb-8">
-    Let's discuss how this service can transform your business.
-  </p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6">
+            Ready to Get Started?
+          </h2>
+          <p className="text-base sm:text-lg text-foreground/60 mb-8 px-2 sm:px-0">
+            Let's discuss how this service can transform your business.
+          </p>
 
-  {/* Centered button */}
-  <div className="flex justify-center">
-    <Link href="/#contact" className="inline-block">
-      <button
-        className={`
-          px-8 py-4 bg-primary text-primary-foreground
-          rounded-lg hover:bg-primary/90 transition font-semibold
-          flex items-center justify-center gap-2 group button-glow
-        `}
-      >
-        Schedule a Consultation
-        <ArrowRight size={20} className="group-hover:translate-x-1 transition" />
-      </button>
-    </Link>
-  </div>
-</div>
-
+          <div className="flex justify-center">
+            <Link href="/#contact" className="inline-block w-full sm:w-auto">
+              <button
+                className="
+                  w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground
+                  rounded-lg hover:bg-primary/90 transition font-semibold
+                  flex items-center justify-center gap-2 group button-glow text-sm sm:text-base
+                "
+              >
+                Schedule a Consultation
+                <ArrowRight size={20} className="group-hover:translate-x-1 transition" />
+              </button>
+            </Link>
+          </div>
+        </div>
       </section>
 
       <Footer />
