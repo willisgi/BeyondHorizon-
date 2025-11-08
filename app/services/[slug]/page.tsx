@@ -202,9 +202,14 @@ export default async function ServiceDetail({ params }: { params: Promise<{ slug
               <Icon className="text-accent" size={32} />
             </div>
             <div className="text-center sm:text-left">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 break-words">
-                {service.title}
-              </h1>
+            <h1
+  className="
+    text-2xl sm:text-3xl md:text-5xl 
+    font-bold text-foreground mb-4 
+    break-words overflow-wrap break-word 
+    text-balance leading-tight text-center sm:text-left
+  "
+>
               <p className="text-base sm:text-lg text-foreground/60 leading-relaxed">
                 {service.description}
               </p>
