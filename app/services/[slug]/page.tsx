@@ -58,7 +58,7 @@ const serviceDetails = {
       "Organizations with unique business challenges that require specialized AI solutions beyond standard offerings.",
   },
   implementation: {
-    title: "Implementation & Integration",
+    title: "Execution & Integration",
     icon: Zap,
     description:
       "Seamlessly integrate AI into your existing infrastructure with minimal disruption.",
